@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Application</title>
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="/static/css/main.css">
+</head>
+
+<body>
+    <div class="container">
+        <ul id="conversation">
+
+        </ul>
+        <form id="form" action="">
+            <input type="text" name="message" id="input">
+            <button class="btn btn-sm btn-success" id="btn-send">Send</button>
+        </form>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        // mo socket -> bat tay vs server
+        var socket = io.connect("http://localhost:3000");  // do mac dinh no lang nghe tren cong 80 -> lang nghe tren cong 3000
+        // thong bao ket noi, cmt van dc
+        // on la ham lang nghe su kien, ten su kien la tham so dau tien, tham so thu 2 la callback func
+        socket.on("connect", function() {
+            console.log("User is connecting to server")
+            // ask name
+            var username = prompt("What is your name");
+            // notify to server
+            // de gui thong tin den server -> sd emit() = socket dc mo ra
+            socket.emit("addUser", username); // emit() thong bao gui di cai gi do, su kien la tham so dau tien, tham so thu 2 la data
+        });
+
+        // listen update_message event
+        socket.on("update_message", function(data) {
+            $("#conversation").append("<li><b>"+ data.sender +": </b>" + data.message + "</li>")
+        })
+
+        // send message event
+        $("#btn-send").click(function(e) {
+            // khong dc gui form di
+            $("#form").submit(function(e) {
+                // return false;
+                e.preventDefault();
+            })
+
+            // get message
+            var message = $("#input").val();
+            $("#input").val("");
+            if (message.trim().length != 0) {
+                socket.emit("send_message", message);
+            }
+        })
+
+        
+    </script>
+</body>
+
+</html>

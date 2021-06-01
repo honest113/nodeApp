@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Post</title>
+    <%- include ('../layout/head.ejs'); %>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/4.6.3/tinymce.min.js"
+        integrity="sha512-SfbLzxlHjVGXCdb3fI/lfL1kfHAX73s/TN7PuCv2YmWPQSsww1TRXeNq/MVdXV6wCpLeLjyRBm8/Sqc/e6GrgQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer">
+    </script>
+    <script type="text/javascript">
+        tinymce.init({
+            selector: 'textarea'
+        });
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <%- include ('../layout/nav.ejs'); %>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Edit Post
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <% if (data && data.error) { %> 
+                            <div id="login-alert" class="alert alert-danger col-sm-12">
+                                <%= data.error %> 
+                            </div>
+                        <% } %> 
+                        <form action="" role="form" method="">
+                            <input type="hidden" name="id" class="id" value="<% if (data && data.post) {%> <%= data.post.id %> <% } %> ">
+                            <div class="form-group">
+                                <label for="title">Title</label>
+                                <input type="text" id="title" class="form-control title" name="title" placeholder="Title" value="<% if (data && data.post) {%> <%= data.post.title %> <% } %> ">
+                            </div>
+                            <div class="form-group">
+                                <label for="content">Content</label>
+                                <textarea name="content" id="content" class="form-control" cols="30" rows="10"
+                                    placeholder="Content"> <% if (data && data.post) {%> <%- data.post.content %> <% } %></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="author">Author</label>
+                                <input type="text" id="author" class="form-control author" name="author" placeholder="Author" value="<% if (data && data.post) {%> <%= data.post.author %> <% } %>">
+                            </div>
+                            <input type="button" class="btn btn-success post-edit" value="Edit">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/js/post.js"></script>
+</body>
+
+</html>
